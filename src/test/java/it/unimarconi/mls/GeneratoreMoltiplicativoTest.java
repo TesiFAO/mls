@@ -34,13 +34,42 @@ public class GeneratoreMoltiplicativoTest extends TestCase {
      * Il massimo period si ottiene se m = 2 ^ (b - 2) con b >= 4
      */
     public void testGenerateWithAs() {
-        List<Integer> as = GeneratoreMoltiplicativo.generateA(8, 5, 10);
+        List<Integer> as = GeneratoreMoltiplicativo.generateA(8, 5, 25);
         List<Integer> memory = null;
         Integer differentLists = 1;
         for (int i = 0 ; i < as.size() ; i++) {
             Integer a = as.get(i);
-            Integer x0 = 3;
-            Integer m = 64;
+            Integer x0 = 31;
+            Integer b = 5;
+            Integer m = new Double(Math.pow(2, b)).intValue();
+            List<Integer> l = GeneratoreMoltiplicativo.generate(a, x0, m);
+            if (memory == null)
+                memory = l;
+            if(!l.equals(memory))
+                differentLists++;
+            else if (l.equals(memory) && differentLists > 1)
+                break;
+            System.out.println("[a = " + a + "][x = " + x0 + "][m = " + m + "] | Periodo: " + l.size());
+            for (int j = 0; j < l.size(); j++) {
+                System.out.print(l.get(j));
+                if (j < l.size() - 1)
+                    System.out.print(", ");
+            }
+            System.out.println("\n");
+        }
+        System.out.println("There are " + differentLists + " different lists");
+    }
+
+    public void testGenerateWithXs() {
+        Integer a = GeneratoreMoltiplicativo.generateA(8, 5, 1).get(0);
+        Integer b = 6;
+        Integer m = new Double(Math.pow(2, b)).intValue();
+        List<Integer> xs = GeneratoreMoltiplicativo.generateX(m);
+        System.out.println(xs.size() + " values for x");
+        List<Integer> memory = null;
+        Integer differentLists = 1;
+        for (int i = 0 ; i < xs.size() ; i++) {
+            Integer x0 = xs.get(i);
             List<Integer> l = GeneratoreMoltiplicativo.generate(a, x0, m);
             if (memory == null)
                 memory = l;

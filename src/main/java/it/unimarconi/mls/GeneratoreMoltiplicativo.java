@@ -29,4 +29,11 @@ public class GeneratoreMoltiplicativo {
         return l;
     }
 
+    public static List<Integer> generateX(Integer m) {
+        List<Integer> l = new ArrayList<Integer>();
+        for (int i = 1 ; i < m ; i += 2)
+            l.add(i);
+        return l;
+    }
+
 }

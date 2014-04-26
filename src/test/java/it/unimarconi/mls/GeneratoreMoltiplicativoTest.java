@@ -155,24 +155,28 @@ public class GeneratoreMoltiplicativoTest extends TestCase {
     }
 
     public void testGenerateIperexponential() {
-        double l = 0.05;
+        double l = 1.0 / 20.0;
         double p = 0.38;
+        double sum = 0;
 //        double l1 = 2 * p * l;
 //        double l2 = 2 * (1 - p) * l;
         double Ta = 1 / l;
         String s = "i = c(";
-        for (double t = 1 ; t < 100 ; t += 1) {
-            s += generateHyperexponential(l, p, t);
+        for (double t = 1 ; t < 10 ; t += 0.1) {
+            double Z = generateHyperexponential(l, p, t);
+            s += Z;
+            sum += Z / 100;
             if (t < 99)
                 s += ", ";
         }
         s += "); plot(i);";
-        System.out.println(s);
+//        System.out.println(s);
+//        System.out.println(sum);
     }
 
     public double generateHyperexponential(double lambda, double p, double t) {
         double Ta = 1 / lambda;
-        double r = 1 - p * Math.exp(-2 * p * lambda * t) - ((1 - p) * Math.exp(-2 * (1 - p) * lambda * t));
+        double r = (1 - p) * Math.exp(-2 * p * lambda * t) - ((1 - p) * Math.exp(-2 * (1 - p) * lambda * t));
         double X = generateExponential(lambda, t);
         if (r <= p)
             return (Ta / (2 * p)) * X;
@@ -182,6 +186,7 @@ public class GeneratoreMoltiplicativoTest extends TestCase {
 
     public double generateExponential(double lambda, double t) {
         double rand = 1 - Math.exp(-lambda * t);
+        System.out.print(-2 * Math.log(rand) + ", ");
         return -1 * (1 / lambda) * Math.log(rand);
     }
 

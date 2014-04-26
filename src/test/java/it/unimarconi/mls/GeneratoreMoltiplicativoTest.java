@@ -3,6 +3,7 @@ package it.unimarconi.mls;
 import junit.framework.TestCase;
 import org.apache.commons.math.linear.RealMatrix;
 import org.apache.commons.math.stat.correlation.Covariance;
+import org.apache.commons.math.stat.correlation.PearsonsCorrelation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class GeneratoreMoltiplicativoTest extends TestCase {
     public void testGenerateWithXs() {
         Integer a = GeneratoreMoltiplicativo.generateA(8, 5, 1).get(0);
         Integer b = 6;
-        Integer m = new Double(Math.pow(2, b)).intValue();
+        Integer m = 29;
         List<Integer> xs = GeneratoreMoltiplicativo.generateX(m);
         System.out.println(xs.size() + " values for x");
         List<Integer> memory = null;
@@ -103,7 +104,7 @@ public class GeneratoreMoltiplicativoTest extends TestCase {
         List<List<Integer>> data = new ArrayList<List<Integer>>();
 
         /* Initiate parameters. */
-        List<Integer> as = GeneratoreMoltiplicativo.generateA(8, 5, 4);
+        List<Integer> as = GeneratoreMoltiplicativo.generateA(8, 5, 20);
         Integer b = 5;
         Integer m = new Double(Math.pow(2, b)).intValue();
         Integer x0 = 3;
@@ -120,7 +121,8 @@ public class GeneratoreMoltiplicativoTest extends TestCase {
             double one[] = list2array(data.get(i));
             double two[] = list2array(data.get(i + 1));
             double cov = new Covariance().covariance(one, two);
-            System.out.println(cov);
+            double cor = new PearsonsCorrelation().correlation(one, two);
+            System.out.println(cor + " | " + cov);
         }
 
     }
@@ -133,24 +135,54 @@ public class GeneratoreMoltiplicativoTest extends TestCase {
     }
 
     public void testRange() {
-        Integer b = 10;
-        Integer m = new Double(Math.pow(2, b)).intValue();
-        Integer x0 = 3;
-        Integer a = 5;
-        List<Integer> l = GeneratoreMoltiplicativo.generate(a, x0, m);
-        List<Double> r = new ArrayList<Double>();
-        for (Integer i : l)
-            r.add((double)i / m);
+        List<Integer> ts = new ArrayList<Integer>();
+        double lambda = 0.05;
         double min = 30;
-        double max = 49;
-        List<Double> test = new ArrayList<Double>();
-        for (Double d : r) {
-            double tmp = min + d * ((max - min) + 1);
-            assertTrue(tmp >= 30 && tmp <= 50);
-            if (!test.contains(tmp))
-                test.add(tmp);
+        double max = 50;
+        for (int i = 0 ; i < 100 ; i++) {
+            double rand = 1 - Math.exp(-lambda * i);
+            System.out.print((min + rand * ((max - min))) + ", ");
         }
-        assertEquals(r.size(), test.size());
+    }
+
+    public void testGenerateExponential() {
+        double lambda = 0.05;
+        for (int i = 0 ; i < 100 ; i++) {
+//            double rand = 1 - Math.exp(-lambda * i);
+//            System.out.print((-1 * (1 / lambda) * Math.log(rand)) + ", ");
+            System.out.println(generateExponential(lambda, i));
+        }
+    }
+
+    public void testGenerateIperexponential() {
+        double l = 0.05;
+        double p = 0.38;
+//        double l1 = 2 * p * l;
+//        double l2 = 2 * (1 - p) * l;
+        double Ta = 1 / l;
+        String s = "i = c(";
+        for (double t = 1 ; t < 100 ; t += 1) {
+            s += generateHyperexponential(l, p, t);
+            if (t < 99)
+                s += ", ";
+        }
+        s += "); plot(i);";
+        System.out.println(s);
+    }
+
+    public double generateHyperexponential(double lambda, double p, double t) {
+        double Ta = 1 / lambda;
+        double r = 1 - p * Math.exp(-2 * p * lambda * t) - ((1 - p) * Math.exp(-2 * (1 - p) * lambda * t));
+        double X = generateExponential(lambda, t);
+        if (r <= p)
+            return (Ta / (2 * p)) * X;
+        else
+            return (Ta / (2 * (1 - p))) * X;
+    }
+
+    public double generateExponential(double lambda, double t) {
+        double rand = 1 - Math.exp(-lambda * t);
+        return -1 * (1 / lambda) * Math.log(rand);
     }
 
 }

@@ -29,7 +29,7 @@ public class Pratica1 extends TestCase {
                 differentLists++;
             else if (l.equals(memory) && differentLists > 1)
                 break;
-            System.out.print("[a = " + a + "]: ");
+            System.out.print("[X0 = " + x0 + "]: ");
             for (int j = 0; j < l.size(); j++) {
                 System.out.print(l.get(j));
                 if (j < l.size() - 1)

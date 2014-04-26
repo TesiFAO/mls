@@ -1,7 +1,10 @@
 package it.unimarconi.mls;
 
 import junit.framework.TestCase;
+import org.apache.commons.math.linear.RealMatrix;
+import org.apache.commons.math.stat.correlation.Covariance;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GeneratoreMoltiplicativoTest extends TestCase {
@@ -39,7 +42,7 @@ public class GeneratoreMoltiplicativoTest extends TestCase {
         Integer differentLists = 1;
         for (int i = 0 ; i < as.size() ; i++) {
             Integer a = as.get(i);
-            Integer x0 = 31;
+            Integer x0 = 3;
             Integer b = 5;
             Integer m = new Double(Math.pow(2, b)).intValue();
             List<Integer> l = GeneratoreMoltiplicativo.generate(a, x0, m);
@@ -92,6 +95,62 @@ public class GeneratoreMoltiplicativoTest extends TestCase {
         Integer m = 8;
         Integer q = 5;
         List<Integer> l = GeneratoreMoltiplicativo.generateA(m, q, 10);
+    }
+
+    public void testCov() {
+
+        /* Initiate data matrix. */
+        List<List<Integer>> data = new ArrayList<List<Integer>>();
+
+        /* Initiate parameters. */
+        List<Integer> as = GeneratoreMoltiplicativo.generateA(8, 5, 4);
+        Integer b = 5;
+        Integer m = new Double(Math.pow(2, b)).intValue();
+        Integer x0 = 3;
+
+        /* Generate sequences changing the value of parameter a. */
+        for (int i = 0 ; i < as.size() ; i++) {
+            Integer a = as.get(i);
+            List<Integer> l = GeneratoreMoltiplicativo.generate(a, x0, m);
+            data.add(l);
+        }
+
+        /* Iterate over the lists to calculate the covariance values. */
+        for (int i = 0 ; i < data.size() - 1 ; i++) {
+            double one[] = list2array(data.get(i));
+            double two[] = list2array(data.get(i + 1));
+            double cov = new Covariance().covariance(one, two);
+            System.out.println(cov);
+        }
+
+    }
+
+    public double[] list2array(List<Integer> l) {
+        double a[] = new double[l.size()];
+        for (int i = 0 ; i < l.size() ; i++)
+            a[i] = l.get(i);
+        return a;
+    }
+
+    public void testRange() {
+        Integer b = 10;
+        Integer m = new Double(Math.pow(2, b)).intValue();
+        Integer x0 = 3;
+        Integer a = 5;
+        List<Integer> l = GeneratoreMoltiplicativo.generate(a, x0, m);
+        List<Double> r = new ArrayList<Double>();
+        for (Integer i : l)
+            r.add((double)i / m);
+        double min = 30;
+        double max = 49;
+        List<Double> test = new ArrayList<Double>();
+        for (Double d : r) {
+            double tmp = min + d * ((max - min) + 1);
+            assertTrue(tmp >= 30 && tmp <= 50);
+            if (!test.contains(tmp))
+                test.add(tmp);
+        }
+        assertEquals(r.size(), test.size());
     }
 
 }

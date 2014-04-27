@@ -41,7 +41,7 @@ public class Pratica2 extends TestCase {
     }
 
     public void testGenerateHyperexponential() {
-        List<Double> l = generateHyperexponential(5, 1, 212, 20, 0.5);
+        List<Double> l = generateHyperexponential(5, 1, 212, 20, 0.38);
         printR(l);
     }
 
@@ -67,25 +67,28 @@ public class Pratica2 extends TestCase {
         return l;
     }
 
+    public List<Double> generateExponential2(int a, int x0, int m, int avg) {
+        List<Double> l = new ArrayList<Double>();
+        List<Double> rns = generateRn(a, x0, m);
+        double lambda = 1.0 / avg;
+        for(Double rn : rns)
+            l.add(-avg * Math.log(rn));
+        return l;
+    }
+
     public List<Double> generateExponential(int a, int x0, int m, int avg) {
         List<Double> l = new ArrayList<Double>();
         List<Double> rns = generateRn(a, x0, m);
         double lambda = 1.0 / avg;
         for(Double rn : rns)
-            l.add(-1 * lambda * Math.log(rn));
+            l.add((-1 / lambda) * Math.log(rn));
         return l;
     }
 
     public List<Double> generateHyperexponential(int a, int x0, int m, int avg, double p) {
-        List<Double> l = new ArrayList<Double>();
         List<Double> zs = new ArrayList<Double>();
-
         List<Double> rns = generateRn(a, x0, m);
         List<Double> Xs = generateExponential(a, x0, m, 1);
-
-        double lambda = 1.0 / avg;
-
-
         for (int i = 0 ; i < rns.size() ; i++) {
             if (rns.get(i) <= p) {
                 zs.add(Xs.get(i) * (avg / (2 * p)));
@@ -97,7 +100,7 @@ public class Pratica2 extends TestCase {
     }
 
     private void printR(List<Double> l) {
-        Collections.sort(l);
+//        Collections.sort(l);
         String s = "l = c(";
         for (int i = 0 ; i < l.size() ; i++) {
             s += l.get(i);

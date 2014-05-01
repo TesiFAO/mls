@@ -117,9 +117,28 @@ public class Utils {
 //            System.out.println("categoria " + i + " contiene " + yss.get(i) + " -> " + (Math.pow(yss.get(i) - nps, 2) / nps));
             v += Math.pow(yss.get(i) - nps, 2) / nps;
         }
-//        System.out.println("nps: " + nps);
-//        System.out.println("v: " + v);
-//        System.out.println();
+        System.out.println("nps: " + nps);
+        System.out.println("v: " + v);
+        System.out.println();
+        return v;
+    }
+
+    public static double calcolaVseriale(List<Double> yss, double n, double ps) {
+        double v = 0.0;
+        double nps = (n / 4096.0) / 2;
+        nps = (43000.0 / 2.0) / 4096.0;
+//        nps = 164;
+        double v1 = 0;
+        for (int i = 0 ; i < yss.size() ; i++) {
+            System.out.println("categoria " + i + " contiene " + yss.get(i) + " -> " + (Math.pow(yss.get(i) - nps, 2) / nps));
+            v += Math.pow(yss.get(i) - nps, 2) / nps;
+            if  ( yss.get(i) <= 0)
+                v1 += Math.pow(yss.get(i) - nps, 2) / nps;
+        }
+        System.out.println("nps: " + nps);
+        System.out.println("v: " + v);
+        System.out.println("v1: " + v1);
+        System.out.println();
         return v;
     }
 

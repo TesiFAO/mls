@@ -25,4 +25,11 @@ public class Pratica4Test extends TestCase {
 
     }
 
+    public void testSeriale() {
+        Pratica4 p = new Pratica4();
+        int x0 = 3;
+        int b = 19;
+        int a = 5;
+        p.seriale(a, x0, b);
+    }
 }

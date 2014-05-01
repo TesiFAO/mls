@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Pratica4 {
 
-    public void seriale(int a, int x0, int b) {
+    public void uniformita(int a, int x0, int b) {
 
         double d = 64.0;
         List<Double> rns = Utils.generaRn(a, x0, b);
@@ -80,9 +80,9 @@ public class Pratica4 {
                 yss.add(pippo);
             double v = Utils.calcolaV(yss, size, 0.015625);
             if (v > min && v < max)
-                System.out.println("OLLE! " + min + " < " + v + " < " + max + " [a = " + a + "]");
+                System.out.println("OLLE! " + min + " < " + v + " < " + max + " [a = " + a + "][x0 = " + x0 + "]");
             else
-                System.out.println("FAILURE! :(  " + min + " < " + v + " < " + max + " [a = " + a + "]");
+                System.out.println("FAILURE! :(  " + min + " < " + v + " < " + max + " [a = " + a + "][x0 = " + x0 + "]");
 //            System.out.println(count + " valori accettabili su 63 categorie");
 //            System.out.println(v);
         }
